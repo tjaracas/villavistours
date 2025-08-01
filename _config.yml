@@ -1,0 +1,15 @@
+title: Volendam 2 - Twee Gebroeders
+description: Boottochten op het Spaanse Water en richting Bandabou – Snorkel, Sightseeing, Vis- en Duiktrips.
+baseurl: ""
+url: "https://volendam2.com"
+theme: minima
+markdown: kramdown
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"

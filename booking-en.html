@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Booking – Volendam 2</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <!--<header class="hero">-->
+    <nav class="navbar">
+      <div class="logo">Volendam 2</div>
+      <ul class="nav-links">
+        <li><a href="index-en.html">Home</a></li>
+        <li><a href="index.html">NL</a></li>
+      </ul>
+    </nav>
+ <!--   <div class="hero-content"> -->
+ <!--     <h1>Book Your Tour</h1> -->
+ <!--     <p>Secure your seat aboard Volendam 2 – Two Brothers</p>-->
+    </div>
+  </header>
+
+  <section class="form-section">
+    <form action="https://formspree.io/f/mwpqnkwa" method="POST" class="booking-form">
+      <label>
+        Name:
+        <input type="text" name="name" required />
+      </label>
+      <label>
+        Email:
+        <input type="email" name="email" required />
+      </label>
+      <label>
+        Phone:
+        <input type="text" name="phone" />
+      </label>
+      <label>
+        Tour Type:
+        <select name="tour">
+          <option>Scenic Tour</option>
+          <option>Fish Tour</option>
+          <option>Dive Tour</option>
+        </select>
+      </label>
+      <label>
+        Date:
+        <input type="date" name="date" required />
+      </label>
+      <label>
+        Message:
+        <textarea name="message"></textarea>
+      </label>
+      <button type="submit">Send Booking</button>
+    </form>
+  </section>
+</body>
+</html>
