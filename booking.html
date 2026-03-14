@@ -16,12 +16,31 @@
   </header>
 
   <main class="max-w-3xl mx-auto py-10 px-4">
+
+    <!-- BOOKING NOTICE -->
+    <div class="mb-8 bg-blue-100 border border-blue-400 text-blue-900 px-6 py-5 rounded-lg shadow">
+      <h3 class="text-xl font-semibold mb-2">Bookings Opening Soon</h3>
+      <p class="mb-3">
+        Our online booking system is currently not active while we prepare our tours.
+        We will open bookings very soon.
+      </p>
+
+      <p class="mb-4">
+        Do you already want to reserve a tour or ask a question?
+      </p>
+
+      <a href="https://wa.me/59995223135"
+         class="inline-block bg-green-500 text-white px-5 py-2 rounded-lg font-medium hover:bg-green-600">
+        Contact us on WhatsApp
+      </a>
+    </div>
+
     <h2 class="text-3xl font-semibold mb-6">Reserve Your Spot</h2>
     <p class="mb-6 text-gray-700">
       Choose your tour, fill in your details and we will confirm your booking by email.
     </p>
 
-    <form action="https://formspree.io/f/mzdjvpej" method="POST" class="bg-white p-6 rounded-lg shadow space-y-4">
+    <form id="bookingForm" action="https://formspree.io/f/mzdjvpej" method="POST" class="bg-white p-6 rounded-lg shadow space-y-4">
       
       <!-- Name -->
       <div>
@@ -65,15 +84,17 @@
       </div>
 
       <!-- Submit -->
-      <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
-        Send Booking Request
+      <button type="submit" class="bg-gray-400 text-white px-6 py-2 rounded cursor-not-allowed">
+        Booking Temporarily Unavailable
       </button>
     </form>
+
   </main>
 
   <footer class="text-center text-gray-500 text-sm py-6">
     © 2025 VillaVis Tours Curacao. All rights reserved.
   </footer>
+
   <script>
     // Auto-select tour from URL parameter
     const params = new URLSearchParams(window.location.search);
@@ -81,6 +102,13 @@
     if (tour) {
       document.getElementById('tour').value = tour;
     }
+
+    // Temporarily disable booking form
+    document.getElementById("bookingForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      alert("Bookings are temporarily unavailable. Please contact us via WhatsApp.");
+    });
   </script>
+
 </body>
 </html>
