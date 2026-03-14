@@ -2,57 +2,113 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Booking – Volendam 2</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Your Tour - VillaVis</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-  <!--<header class="hero">-->
-    <nav class="navbar">
-      <div class="logo">Volendam 2</div>
-      <ul class="nav-links">
-        <li><a href="index-en.html">Home</a></li>
-        <li><a href="index.html">NL</a></li>
-      </ul>
+<body class="bg-gray-100 text-gray-800">
+
+  <header class="bg-white shadow p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">VillaVis - Book Your Tour</h1>
+    <nav>
+      <a href="index.html" class="text-blue-600 hover:underline mx-2">Home</a>
     </nav>
- <!--   <div class="hero-content"> -->
- <!--     <h1>Book Your Tour</h1> -->
- <!--     <p>Secure your seat aboard Volendam 2 – Two Brothers</p>-->
-    </div>
   </header>
 
-  <section class="form-section">
-    <form action="https://formspree.io/f/mwpqnkwa" method="POST" class="booking-form">
-      <label>
-        Name:
-        <input type="text" name="name" required />
-      </label>
-      <label>
-        Email:
-        <input type="email" name="email" required />
-      </label>
-      <label>
-        Phone:
-        <input type="text" name="phone" />
-      </label>
-      <label>
-        Tour Type:
-        <select name="tour">
-          <option>Scenic Tour</option>
-          <option>Fish Tour</option>
-          <option>Dive Tour</option>
+  <main class="max-w-3xl mx-auto py-10 px-4">
+
+    <!-- BOOKING NOTICE -->
+    <div class="mb-8 bg-blue-100 border border-blue-400 text-blue-900 px-6 py-5 rounded-lg shadow">
+      <h3 class="text-xl font-semibold mb-2">Bookings Opening Soon</h3>
+      <p class="mb-3">
+        Our online booking system is currently not active while we prepare our tours.
+        We will open bookings very soon.
+      </p>
+
+      <p class="mb-4">
+        Do you already want to reserve a tour or ask a question?
+      </p>
+
+      <a href="https://wa.me/59995223135"
+         class="inline-block bg-green-500 text-white px-5 py-2 rounded-lg font-medium hover:bg-green-600">
+        Contact us on WhatsApp
+      </a>
+    </div>
+
+    <h2 class="text-3xl font-semibold mb-6">Reserve Your Spot</h2>
+    <p class="mb-6 text-gray-700">
+      Choose your tour, fill in your details and we will confirm your booking by email.
+    </p>
+
+    <form id="bookingForm" action="https://formspree.io/f/mzdjvpej" method="POST" class="bg-white p-6 rounded-lg shadow space-y-4">
+      
+      <!-- Name -->
+      <div>
+        <label for="name" class="block font-medium">Name</label>
+        <input type="text" id="name" name="name" required class="mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label for="email" class="block font-medium">Email</label>
+        <input type="email" id="email" name="_replyto" required class="mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
+      </div>
+
+      <!-- Tour Selection -->
+      <div>
+        <label for="tour" class="block font-medium">Select Tour</label>
+        <select id="tour" name="tour" required class="mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
+          <option value="">-- Please choose an option --</option>
+          <option value="spanishwater">Spanish Water Cruise</option>
+          <option value="private">Private charter</option>
+          <option value="sunset">Sunset / Winetasting tour</option>
         </select>
-      </label>
-      <label>
-        Date:
-        <input type="date" name="date" required />
-      </label>
-      <label>
-        Message:
-        <textarea name="message"></textarea>
-      </label>
-      <button type="submit">Send Booking</button>
+      </div>
+
+      <!-- Date -->
+      <div>
+        <label for="date" class="block font-medium">Preferred Date</label>
+        <input type="date" id="date" name="date" required class="mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
+      </div>
+
+      <!-- Number of People -->
+      <div>
+        <label for="people" class="block font-medium">Number of People</label>
+        <input type="number" id="people" name="people" min="1" required class="mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
+      </div>
+
+      <!-- Message -->
+      <div>
+        <label for="message" class="block font-medium">Additional Information</label>
+        <textarea id="message" name="message" rows="4" class="mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"></textarea>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="bg-gray-400 text-white px-6 py-2 rounded cursor-not-allowed">
+        Booking Temporarily Unavailable
+      </button>
     </form>
-  </section>
+
+  </main>
+
+  <footer class="text-center text-gray-500 text-sm py-6">
+    © 2025 VillaVis Tours Curacao. All rights reserved.
+  </footer>
+
+  <script>
+    // Auto-select tour from URL parameter
+    const params = new URLSearchParams(window.location.search);
+    const tour = params.get('tour');
+    if (tour) {
+      document.getElementById('tour').value = tour;
+    }
+
+    // Temporarily disable booking form
+    document.getElementById("bookingForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      alert("Bookings are temporarily unavailable. Please contact us via WhatsApp.");
+    });
+  </script>
+
 </body>
 </html>
