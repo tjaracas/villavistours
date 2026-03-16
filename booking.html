@@ -37,7 +37,7 @@ Reserveer uw tour
 </div>
 
 <!-- Tour selectie -->
-<div id="tourSelectSection">
+<div>
 <label class="block font-medium">Selecteer Tour</label>
 
 <select id="tour" name="tour" class="mt-1 w-full border rounded px-3 py-2">
@@ -45,14 +45,19 @@ Reserveer uw tour
 <option value="">-- Kies een optie --</option>
 
 <option value="spanishwater">
-Private Boat Charter (zonder drank)
+Sightseeing Tour (zonder drank)
 </option>
 
 <option value="spanishwaterwithfood">
 Sightseeing All-In Tour (met drank)
 </option>
 
+<option value="private">
+Private Charter (met drank)
+</option>
+
 </select>
+
 </div>
 
 <!-- Datum -->
@@ -171,7 +176,7 @@ let selectedTour = tourSelect.value;
 if(selectedTour === "spanishwater"){
 
 drinksSection.style.display = "none";
-tourTitle.innerText = "Private Boat Charter";
+tourTitle.innerText = "Sightseeing Tour";
 
 }
 
@@ -179,6 +184,13 @@ else if(selectedTour === "spanishwaterwithfood"){
 
 drinksSection.style.display = "block";
 tourTitle.innerText = "Sightseeing All-In Tour";
+
+}
+
+else if(selectedTour === "private"){
+
+drinksSection.style.display = "block";
+tourTitle.innerText = "Private Charter";
 
 }
 
@@ -193,6 +205,8 @@ updateTour();
 
 tourSelect.addEventListener("change", updateTour);
 
+
+// drank berekening
 
 const people = document.getElementById("people");
 const drinks = document.querySelectorAll(".drink");
