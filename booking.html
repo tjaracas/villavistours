@@ -1,114 +1,221 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Book Your Tour - VillaVis</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boek uw Tour - VillaVis</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
+
 <body class="bg-gray-100 text-gray-800">
 
-  <header class="bg-white shadow p-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold">VillaVis - Book Your Tour</h1>
-    <nav>
-      <a href="index.html" class="text-blue-600 hover:underline mx-2">Home</a>
-    </nav>
-  </header>
+<header class="bg-white shadow p-4 flex justify-between items-center">
+<h1 class="text-xl font-bold">VillaVis - Tour Reserveren</h1>
+<nav>
+<a href="index.html" class="text-blue-600 hover:underline mx-2">Home</a>
+</nav>
+</header>
 
-  <main class="max-w-3xl mx-auto py-10 px-4">
+<main class="max-w-3xl mx-auto py-10 px-4">
 
-    <!-- BOOKING NOTICE -->
-    <div class="mb-8 bg-blue-100 border border-blue-400 text-blue-900 px-6 py-5 rounded-lg shadow">
-      <h3 class="text-xl font-semibold mb-2">Bookings Opening Soon</h3>
-      <p class="mb-3">
-        Our online booking system is currently not active while we prepare our tours.
-        We will open bookings very soon.
-      </p>
+<h2 class="text-3xl font-semibold mb-6">Reserveer uw plek</h2>
 
-      <p class="mb-4">
-        Do you already want to reserve a tour or ask a question?
-      </p>
+<p class="mb-6 text-gray-700">
+Kies uw tour en drankjes. Iedere gast ontvangt <strong>2 drankjes inbegrepen</strong>.
+Extra drankjes worden achteraf in rekening gebracht.
+</p>
 
-      <a href="https://wa.me/59995223135"
-         class="inline-block bg-green-500 text-white px-5 py-2 rounded-lg font-medium hover:bg-green-600">
-        Contact us on WhatsApp
-      </a>
-    </div>
+<form action="https://formspree.io/f/mzdjvpej" method="POST" class="bg-white p-6 rounded-lg shadow space-y-4">
 
-    <h2 class="text-3xl font-semibold mb-6">Reserve Your Spot</h2>
-    <p class="mb-6 text-gray-700">
-      Choose your tour, fill in your details and we will confirm your booking by email.
-    </p>
+<!-- Naam -->
+<div>
+<label class="block font-medium">Naam</label>
+<input type="text" name="name" required class="mt-1 w-full border rounded px-3 py-2">
+</div>
 
-    <form id="bookingForm" action="https://formspree.io/f/mzdjvpej" method="POST" class="bg-white p-6 rounded-lg shadow space-y-4">
-      
-      <!-- Name -->
-      <div>
-        <label for="name" class="block font-medium">Name</label>
-        <input type="text" id="name" name="name" required class="mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
-      </div>
+<!-- Email -->
+<div>
+<label class="block font-medium">Email</label>
+<input type="email" name="_replyto" required class="mt-1 w-full border rounded px-3 py-2">
+</div>
 
-      <!-- Email -->
-      <div>
-        <label for="email" class="block font-medium">Email</label>
-        <input type="email" id="email" name="_replyto" required class="mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
-      </div>
+<!-- Tour -->
+<div>
+<label class="block font-medium">Selecteer Tour</label>
+<select id="tour" name="tour" required class="mt-1 w-full border rounded px-3 py-2">
+<option value="">-- Kies een optie --</option>
+<option value="private">Private Tour</option>
+<option value="sightseeing">Sightseeing All-In Tour</option>
+</select>
+</div>
 
-      <!-- Tour Selection -->
-      <div>
-        <label for="tour" class="block font-medium">Select Tour</label>
-        <select id="tour" name="tour" required class="mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
-          <option value="">-- Please choose an option --</option>
-          <option value="spanishwater">Spanish Water Cruise</option>
-          <option value="private">Private charter</option>
-          <option value="sunset">Sunset / Winetasting tour</option>
-        </select>
-      </div>
+<!-- Datum -->
+<div>
+<label class="block font-medium">Gewenste datum</label>
+<input type="date" name="date" required class="mt-1 w-full border rounded px-3 py-2">
+</div>
 
-      <!-- Date -->
-      <div>
-        <label for="date" class="block font-medium">Preferred Date</label>
-        <input type="date" id="date" name="date" required class="mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
-      </div>
+<!-- Personen -->
+<div>
+<label class="block font-medium">Aantal personen</label>
+<input type="number" id="people" name="people" min="1" required class="mt-1 w-full border rounded px-3 py-2">
+</div>
 
-      <!-- Number of People -->
-      <div>
-        <label for="people" class="block font-medium">Number of People</label>
-        <input type="number" id="people" name="people" min="1" required class="mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
-      </div>
+<!-- Inbegrepen drankjes -->
+<div class="bg-blue-50 p-4 rounded">
 
-      <!-- Message -->
-      <div>
-        <label for="message" class="block font-medium">Additional Information</label>
-        <textarea id="message" name="message" rows="4" class="mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"></textarea>
-      </div>
+<p><strong>Inbegrepen drankjes:</strong> <span id="included">0</span></p>
 
-      <!-- Submit -->
-      <button type="submit" class="bg-gray-400 text-white px-6 py-2 rounded cursor-not-allowed">
-        Booking Temporarily Unavailable
-      </button>
-    </form>
+<p class="text-sm text-gray-600">
+Iedere persoon krijgt 2 drankjes inbegrepen.
+</p>
 
-  </main>
+<button type="button" id="autoFill"
+class="mt-3 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+Automatische drankverdeling
+</button>
 
-  <footer class="text-center text-gray-500 text-sm py-6">
-    © 2025 VillaVis Tours Curacao. All rights reserved.
-  </footer>
+</div>
 
-  <script>
-    // Auto-select tour from URL parameter
-    const params = new URLSearchParams(window.location.search);
-    const tour = params.get('tour');
-    if (tour) {
-      document.getElementById('tour').value = tour;
-    }
+<!-- Dranklijst -->
+<div>
 
-    // Temporarily disable booking form
-    document.getElementById("bookingForm").addEventListener("submit", function(e){
-      e.preventDefault();
-      alert("Bookings are temporarily unavailable. Please contact us via WhatsApp.");
-    });
-  </script>
+<label class="block font-medium mb-2">Kies uw drankjes</label>
+
+<p class="text-sm text-gray-600 mb-3">
+Bier: alleen Amstel Bright.  
+Frisdrank: Coca Cola, Sprite, Ice Tea, Ginger Ale, Sinas of Cassis.
+</p>
+
+<div class="grid grid-cols-2 gap-3">
+
+<label>Amstel Bright
+<input type="number" class="drink w-full border rounded px-2 py-1" name="amstel" value="0" min="0">
+</label>
+
+<label>Coca Cola
+<input type="number" class="drink w-full border rounded px-2 py-1" name="coke" value="0" min="0">
+</label>
+
+<label>Sprite
+<input type="number" class="drink w-full border rounded px-2 py-1" name="sprite" value="0" min="0">
+</label>
+
+<label>Lemon Ice Tea
+<input type="number" class="drink w-full border rounded px-2 py-1" name="lemon_ice_tea" value="0" min="0">
+</label>
+
+<label>Peach Ice Tea
+<input type="number" class="drink w-full border rounded px-2 py-1" name="peach_ice_tea" value="0" min="0">
+</label>
+
+<label>Ginger Ale
+<input type="number" class="drink w-full border rounded px-2 py-1" name="ginger_ale" value="0" min="0">
+</label>
+
+<label>Sinas
+<input type="number" class="drink w-full border rounded px-2 py-1" name="sinas" value="0" min="0">
+</label>
+
+<label>Cassis
+<input type="number" class="drink w-full border rounded px-2 py-1" name="cassis" value="0" min="0">
+</label>
+
+</div>
+
+<p class="mt-3">
+Geselecteerde drankjes: <strong id="selected">0</strong>
+</p>
+
+<p id="warning" class="text-red-600 hidden">
+U heeft meer drankjes geselecteerd dan inbegrepen. Extra drankjes worden achteraf afgerekend.
+</p>
+
+</div>
+
+<!-- Extra info -->
+<div>
+<label class="block font-medium">Extra informatie</label>
+<textarea name="message" rows="4" class="mt-1 w-full border rounded px-3 py-2"></textarea>
+</div>
+
+<button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+Boekingsaanvraag versturen
+</button>
+
+</form>
+
+</main>
+
+<footer class="text-center text-gray-500 text-sm py-6">
+© 2025 VillaVis Tours Curacao. Alle rechten voorbehouden.
+</footer>
+
+<script>
+
+const people = document.getElementById("people");
+const included = document.getElementById("included");
+const selected = document.getElementById("selected");
+const warning = document.getElementById("warning");
+const drinks = document.querySelectorAll(".drink");
+
+function updateDrinks(){
+
+let p = parseInt(people.value) || 0;
+let inc = p * 2;
+
+included.textContent = inc;
+
+let total = 0;
+
+drinks.forEach(d=>{
+total += parseInt(d.value) || 0;
+});
+
+selected.textContent = total;
+
+if(total > inc){
+warning.classList.remove("hidden");
+}else{
+warning.classList.add("hidden");
+}
+
+}
+
+people.addEventListener("input", updateDrinks);
+
+drinks.forEach(d=>{
+d.addEventListener("input", updateDrinks);
+});
+
+
+document.getElementById("autoFill").addEventListener("click", function(){
+
+let p = parseInt(people.value) || 0;
+let inc = p * 2;
+
+let beer = Math.round(inc * 0.5);
+let soda = inc - beer;
+
+drinks.forEach(d=> d.value = 0);
+
+document.querySelector("[name='amstel']").value = beer;
+document.querySelector("[name='coke']").value = soda;
+
+updateDrinks();
+
+});
+
+
+// URL tour selectie
+const params = new URLSearchParams(window.location.search);
+const tour = params.get('tour');
+
+if (tour){
+document.getElementById('tour').value = tour;
+}
+
+</script>
 
 </body>
 </html>
