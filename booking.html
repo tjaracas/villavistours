@@ -18,12 +18,9 @@
 
 <main class="max-w-3xl mx-auto py-10 px-4">
 
-<h2 class="text-3xl font-semibold mb-6">Reserveer uw plek</h2>
-
-<p class="mb-6 text-gray-700">
-Kies uw tour en drankjes. Iedere gast ontvangt <strong>2 drankjes inbegrepen</strong>.
-Extra drankjes worden achteraf in rekening gebracht.
-</p>
+<h2 id="tourTitle" class="text-3xl font-semibold mb-6">
+Reserveer uw tour
+</h2>
 
 <form action="https://formspree.io/f/mzdjvpej" method="POST" class="bg-white p-6 rounded-lg shadow space-y-4">
 
@@ -39,13 +36,22 @@ Extra drankjes worden achteraf in rekening gebracht.
 <input type="email" name="_replyto" required class="mt-1 w-full border rounded px-3 py-2">
 </div>
 
-<!-- Tour -->
-<div>
+<!-- Tour selectie -->
+<div id="tourSelectSection">
 <label class="block font-medium">Selecteer Tour</label>
-<select id="tour" name="tour" required class="mt-1 w-full border rounded px-3 py-2">
+
+<select id="tour" name="tour" class="mt-1 w-full border rounded px-3 py-2">
+
 <option value="">-- Kies een optie --</option>
-<option value="private">Private Tour</option>
-<option value="sightseeing">Sightseeing All-In Tour</option>
+
+<option value="spanishwater">
+Private Boat Charter (zonder drank)
+</option>
+
+<option value="spanishwaterwithfood">
+Sightseeing All-In Tour (met drank)
+</option>
+
 </select>
 </div>
 
@@ -61,31 +67,25 @@ Extra drankjes worden achteraf in rekening gebracht.
 <input type="number" id="people" name="people" min="1" required class="mt-1 w-full border rounded px-3 py-2">
 </div>
 
-<!-- Inbegrepen drankjes -->
+<!-- DRANK SECTIE -->
+<div id="drinksSection" class="space-y-4">
+
 <div class="bg-blue-50 p-4 rounded">
 
-<p><strong>Inbegrepen drankjes:</strong> <span id="included">0</span></p>
+<p>
+<strong>Inbegrepen drankjes:</strong>
+<span id="included">0</span>
+</p>
 
 <p class="text-sm text-gray-600">
 Iedere persoon krijgt 2 drankjes inbegrepen.
 </p>
 
-<button type="button" id="autoFill"
-class="mt-3 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-Automatische drankverdeling
-</button>
-
 </div>
 
-<!-- Dranklijst -->
 <div>
 
 <label class="block font-medium mb-2">Kies uw drankjes</label>
-
-<p class="text-sm text-gray-600 mb-3">
-Bier: alleen Amstel Bright.  
-Frisdrank: Coca Cola, Sprite, Ice Tea, Ginger Ale, Sinas of Cassis.
-</p>
 
 <div class="grid grid-cols-2 gap-3">
 
@@ -124,12 +124,16 @@ Frisdrank: Coca Cola, Sprite, Ice Tea, Ginger Ale, Sinas of Cassis.
 </div>
 
 <p class="mt-3">
-Geselecteerde drankjes: <strong id="selected">0</strong>
+Geselecteerde drankjes:
+<strong id="selected">0</strong>
 </p>
 
 <p id="warning" class="text-red-600 hidden">
-U heeft meer drankjes geselecteerd dan inbegrepen. Extra drankjes worden achteraf afgerekend.
+U heeft meer drankjes geselecteerd dan inbegrepen.
+Extra drankjes worden achteraf afgerekend.
 </p>
+
+</div>
 
 </div>
 
@@ -148,16 +152,53 @@ Boekingsaanvraag versturen
 </main>
 
 <footer class="text-center text-gray-500 text-sm py-6">
-© 2025 VillaVis Tours Curacao. Alle rechten voorbehouden.
+© 2025 VillaVis Tours Curacao
 </footer>
 
 <script>
 
+const params = new URLSearchParams(window.location.search);
+const tourParam = params.get('tour');
+
+const drinksSection = document.getElementById("drinksSection");
+const tourSelect = document.getElementById("tour");
+const tourTitle = document.getElementById("tourTitle");
+
+function updateTour(){
+
+let selectedTour = tourSelect.value;
+
+if(selectedTour === "spanishwater"){
+
+drinksSection.style.display = "none";
+tourTitle.innerText = "Private Boat Charter";
+
+}
+
+else if(selectedTour === "spanishwaterwithfood"){
+
+drinksSection.style.display = "block";
+tourTitle.innerText = "Sightseeing All-In Tour";
+
+}
+
+}
+
+if(tourParam){
+
+tourSelect.value = tourParam;
+updateTour();
+
+}
+
+tourSelect.addEventListener("change", updateTour);
+
+
 const people = document.getElementById("people");
+const drinks = document.querySelectorAll(".drink");
 const included = document.getElementById("included");
 const selected = document.getElementById("selected");
 const warning = document.getElementById("warning");
-const drinks = document.querySelectorAll(".drink");
 
 function updateDrinks(){
 
@@ -175,9 +216,13 @@ total += parseInt(d.value) || 0;
 selected.textContent = total;
 
 if(total > inc){
+
 warning.classList.remove("hidden");
+
 }else{
+
 warning.classList.add("hidden");
+
 }
 
 }
@@ -187,33 +232,6 @@ people.addEventListener("input", updateDrinks);
 drinks.forEach(d=>{
 d.addEventListener("input", updateDrinks);
 });
-
-
-document.getElementById("autoFill").addEventListener("click", function(){
-
-let p = parseInt(people.value) || 0;
-let inc = p * 2;
-
-let beer = Math.round(inc * 0.5);
-let soda = inc - beer;
-
-drinks.forEach(d=> d.value = 0);
-
-document.querySelector("[name='amstel']").value = beer;
-document.querySelector("[name='coke']").value = soda;
-
-updateDrinks();
-
-});
-
-
-// URL tour selectie
-const params = new URLSearchParams(window.location.search);
-const tour = params.get('tour');
-
-if (tour){
-document.getElementById('tour').value = tour;
-}
 
 </script>
 
