@@ -20,7 +20,7 @@
 
 <h2 id="tourTitle" class="text-3xl font-semibold mb-6">Reserveer uw tour</h2>
 
-<form action="https://formspree.io/f/mzdjvpej" method="POST" class="bg-white p-6 rounded-lg shadow space-y-5">
+<form id="bookingForm" action="https://formspree.io/f/mzdjvpej" method="POST" class="bg-white p-6 rounded-lg shadow space-y-5">
 
 <div>
 <label class="block font-medium">Naam</label>
@@ -34,7 +34,7 @@
 
 <div>
 <label class="block font-medium">Selecteer Tour</label>
-<select id="tour" name="tour" class="mt-1 w-full border rounded px-3 py-2">
+<select id="tour" name="tour" required class="mt-1 w-full border rounded px-3 py-2">
 <option value="">-- Kies een optie --</option>
 <option value="spanishwater">Sightseeing Tour - zonder drank</option>
 <option value="spanishwaterwithfood">Sightseeing Tour - met 2 drankjes p.p. en extra opties</option>
@@ -140,6 +140,7 @@ Kaasplank bestellen
 </div>
 
 <input type="hidden" id="extraTotalInput" name="extra_total_xcg" value="0">
+<input type="hidden" id="summaryInput" name="booking_summary" value="">
 
 </div>
 
@@ -148,9 +149,24 @@ Kaasplank bestellen
 <textarea name="message" rows="4" class="mt-1 w-full border rounded px-3 py-2"></textarea>
 </div>
 
-<button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
-Boekingsaanvraag versturen
+<div id="summaryBox" class="hidden bg-yellow-50 border border-yellow-300 p-4 rounded space-y-2">
+<h3 class="text-xl font-semibold">Controleer uw boeking</h3>
+<div id="summaryContent"></div>
+</div>
+
+<div class="flex flex-wrap gap-3">
+<button type="button" id="reviewButton" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+Controleer boeking
 </button>
+
+<button type="button" id="editButton" class="hidden bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600">
+Aanpassen
+</button>
+
+<button type="submit" id="submitButton" class="hidden bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
+Definitief versturen
+</button>
+</div>
 
 </form>
 
@@ -164,6 +180,7 @@ Boekingsaanvraag versturen
 const params = new URLSearchParams(window.location.search);
 const tourParam = params.get('tour');
 
+const bookingForm = document.getElementById("bookingForm");
 const drinksSection = document.getElementById("drinksSection");
 const tourSelect = document.getElementById("tour");
 const tourTitle = document.getElementById("tourTitle");
@@ -181,6 +198,13 @@ const cheeseQty = document.getElementById("cheeseQty");
 const extraBottles = document.querySelectorAll(".extraBottle");
 const extraTotal = document.getElementById("extraTotal");
 const extraTotalInput = document.getElementById("extraTotalInput");
+
+const reviewButton = document.getElementById("reviewButton");
+const editButton = document.getElementById("editButton");
+const submitButton = document.getElementById("submitButton");
+const summaryBox = document.getElementById("summaryBox");
+const summaryContent = document.getElementById("summaryContent");
+const summaryInput = document.getElementById("summaryInput");
 
 const sushiPricePerPerson = 30;
 const cheesePricePerPerson = 20;
@@ -232,6 +256,77 @@ function updateCalculation(){
   extraTotalInput.value = total;
 }
 
+function bottleSummary(){
+  let result = [];
+
+  extraBottles.forEach(item => {
+    let qty = parseInt(item.value) || 0;
+    if(qty > 0){
+      let labelText = item.parentElement.textContent.trim().replace(/\s+/g, " ");
+      result.push(`${labelText}: ${qty}`);
+    }
+  });
+
+  return result.length ? result.join("<br>") : "Geen extra flessen";
+}
+
+function createSummary(){
+  updateCalculation();
+
+  const name = document.querySelector('input[name="name"]').value;
+  const email = document.querySelector('input[name="_replyto"]').value;
+  const date = document.querySelector('input[name="date"]').value;
+  const peopleValue = parseInt(people.value) || 0;
+  const tourText = tourSelect.options[tourSelect.selectedIndex].text;
+  const selectedTour = tourSelect.value;
+  const totalExtra = extraTotal.textContent;
+  const message = document.querySelector('textarea[name="message"]').value;
+
+  let beer = document.querySelector('input[name="bier_inbegrepen"]').checked ? "Ja" : "Nee";
+  let soft = document.querySelector('input[name="frisdrank_inbegrepen"]').checked ? "Ja" : "Nee";
+
+  let drinksInfo = "Niet inbegrepen bij deze tour";
+
+  if(selectedTour === "spanishwaterwithfood" || selectedTour === "private"){
+    drinksInfo = `
+      <p><strong>Inbegrepen drankjes:</strong> ${peopleValue * 2}</p>
+      <p><strong>Bier:</strong> ${beer}</p>
+      <p><strong>Frisdrank:</strong> ${soft}</p>
+    `;
+  }
+
+  let sushiInfo = sushiCheck.checked ? `${sushiQty.value || 0} personen x 30 XCG` : "Nee";
+  let cheeseInfo = cheeseCheck.checked ? `${cheeseQty.value || 0} personen x 20 XCG` : "Nee";
+
+  const summaryHtml = `
+    <p><strong>Naam:</strong> ${name}</p>
+    <p><strong>Email:</strong> ${email}</p>
+    <p><strong>Tour:</strong> ${tourText}</p>
+    <p><strong>Datum:</strong> ${date}</p>
+    <p><strong>Aantal personen:</strong> ${peopleValue}</p>
+    ${drinksInfo}
+    <p><strong>Sushi platter:</strong> ${sushiInfo}</p>
+    <p><strong>Kaasplank:</strong> ${cheeseInfo}</p>
+    <p><strong>Extra flessen:</strong><br>${bottleSummary()}</p>
+    <p><strong>Extra kosten:</strong> ${totalExtra} XCG</p>
+    <p><strong>Extra informatie:</strong> ${message || "Geen"}</p>
+  `;
+
+  summaryContent.innerHTML = summaryHtml;
+
+  summaryInput.value = summaryHtml
+    .replace(/<br>/g, "\n")
+    .replace(/<\/p>/g, "\n")
+    .replace(/<[^>]*>/g, "")
+    .trim();
+
+  summaryBox.classList.remove("hidden");
+  submitButton.classList.remove("hidden");
+  editButton.classList.remove("hidden");
+  reviewButton.textContent = "Samenvatting bijwerken";
+  summaryBox.scrollIntoView({ behavior: "smooth" });
+}
+
 sushiCheck.addEventListener("change", function(){
   sushiBox.classList.toggle("hidden", !sushiCheck.checked);
   updateCalculation();
@@ -251,6 +346,22 @@ extraBottles.forEach(item => {
 });
 
 tourSelect.addEventListener("change", updateTour);
+
+reviewButton.addEventListener("click", function(){
+  if(bookingForm.checkValidity()){
+    createSummary();
+  } else {
+    bookingForm.reportValidity();
+  }
+});
+
+editButton.addEventListener("click", function(){
+  summaryBox.classList.add("hidden");
+  submitButton.classList.add("hidden");
+  editButton.classList.add("hidden");
+  reviewButton.textContent = "Controleer boeking";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
 
 if(tourParam){
   tourSelect.value = tourParam;
