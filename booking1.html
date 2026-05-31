@@ -38,7 +38,7 @@
 <option value="">-- Kies een optie --</option>
 <option value="spanishwater">Sightseeing Tour - zonder drank</option>
 <option value="spanishwaterwithfood">Sightseeing Tour - met 2 drankjes p.p. en extra opties</option>
-<option value="private">Private Charter - met 2 drankjes p.p. en extra opties</option>
+<option value="private">Private Charter All-In - met 2 drankjes p.p. en extra opties</option>
 </select>
 </div>
 
@@ -51,6 +51,13 @@
 <label class="block font-medium">Aantal personen</label>
 <input type="number" id="people" name="people" min="1" required class="mt-1 w-full border rounded px-3 py-2">
 </div>
+
+<div class="bg-green-50 p-4 rounded">
+<p><strong>Tripprijs:</strong> $<span id="tripTotal">0</span></p>
+<p id="tripPriceInfo" class="text-sm text-gray-600"></p>
+</div>
+
+<input type="hidden" id="tripTotalInput" name="trip_total_usd" value="0">
 
 <div id="drinksSection" class="space-y-4 hidden">
 
@@ -87,7 +94,7 @@ Sushi platter bestellen
 <div id="sushiBox" class="hidden ml-5">
 <label>Voor hoeveel personen?</label>
 <input type="number" id="sushiQty" name="sushi_personen" min="0" value="0" class="w-full border rounded px-3 py-2">
-<p class="text-sm text-gray-500">30 XCG per persoon</p>
+<p class="text-sm text-gray-500">$30 per persoon</p>
 </div>
 
 <label class="block">
@@ -98,7 +105,7 @@ Kaasplank bestellen
 <div id="cheeseBox" class="hidden ml-5">
 <label>Voor hoeveel personen?</label>
 <input type="number" id="cheeseQty" name="kaasplank_personen" min="0" value="0" class="w-full border rounded px-3 py-2">
-<p class="text-sm text-gray-500">20 XCG per persoon</p>
+<p class="text-sm text-gray-500">$20 per persoon</p>
 </div>
 
 </div>
@@ -109,37 +116,37 @@ Kaasplank bestellen
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-<label>Whiskey Old Parr - 100 XCG
+<label>Whiskey Old Parr - $100
 <input type="number" class="extraBottle w-full border rounded px-3 py-2" name="old_parr" min="0" value="0" data-price="100">
 </label>
 
-<label>Bruine Rum Barceló - 100 XCG
+<label>Bruine Rum Barceló - $100
 <input type="number" class="extraBottle w-full border rounded px-3 py-2" name="barcelo" min="0" value="0" data-price="100">
 </label>
 
-<label>Witte Rum Bacardi - 100 XCG
+<label>Witte Rum Bacardi - $100
 <input type="number" class="extraBottle w-full border rounded px-3 py-2" name="bacardi" min="0" value="0" data-price="100">
 </label>
 
-<label>Wodka Absolut - 100 XCG
+<label>Wodka Absolut - $100
 <input type="number" class="extraBottle w-full border rounded px-3 py-2" name="absolut" min="0" value="0" data-price="100">
 </label>
 
-<label>Witte wijn - 80 XCG
+<label>Witte wijn - $80
 <input type="number" class="extraBottle w-full border rounded px-3 py-2" name="witte_wijn" min="0" value="0" data-price="80">
 </label>
 
-<label>Rode wijn - 80 XCG
+<label>Rode wijn - $80
 <input type="number" class="extraBottle w-full border rounded px-3 py-2" name="rode_wijn" min="0" value="0" data-price="80">
 </label>
 
 </div>
 
 <div class="bg-gray-50 p-4 rounded">
-<p><strong>Extra kosten:</strong> <span id="extraTotal">0</span> XCG</p>
+<p><strong>Extra kosten:</strong> $<span id="extraTotal">0</span></p>
 </div>
 
-<input type="hidden" id="extraTotalInput" name="extra_total_xcg" value="0">
+<input type="hidden" id="extraTotalInput" name="extra_total_usd" value="0">
 <input type="hidden" id="summaryInput" name="booking_summary" value="">
 
 </div>
@@ -187,6 +194,10 @@ const tourTitle = document.getElementById("tourTitle");
 const people = document.getElementById("people");
 const included = document.getElementById("included");
 
+const tripTotal = document.getElementById("tripTotal");
+const tripTotalInput = document.getElementById("tripTotalInput");
+const tripPriceInfo = document.getElementById("tripPriceInfo");
+
 const sushiCheck = document.getElementById("sushiCheck");
 const sushiBox = document.getElementById("sushiBox");
 const sushiQty = document.getElementById("sushiQty");
@@ -209,6 +220,41 @@ const summaryInput = document.getElementById("summaryInput");
 const sushiPricePerPerson = 30;
 const cheesePricePerPerson = 20;
 
+function calculateTripPrice(){
+  let selectedTour = tourSelect.value;
+  let p = parseInt(people.value) || 0;
+  let price = 0;
+  let info = "";
+
+  if(selectedTour === "private"){
+    price = 1000;
+    info = "Private Charter All-In: vaste prijs van $1000.";
+  }
+  else if(selectedTour === "spanishwaterwithfood"){
+    price = 600;
+
+    if(p > 6){
+      price += (p - 6) * 50;
+    }
+
+    info = "Sightseeing All-In: $600 inclusief 6 personen. Vanaf meer dan 6 personen: $50 per extra persoon.";
+  }
+  else if(selectedTour === "spanishwater"){
+    price = 0;
+    info = "Sightseeing Tour zonder drank: prijs nog niet ingesteld.";
+  }
+  else{
+    price = 0;
+    info = "";
+  }
+
+  tripTotal.textContent = price;
+  tripTotalInput.value = price;
+  tripPriceInfo.textContent = info;
+
+  return price;
+}
+
 function updateTour(){
   let selectedTour = tourSelect.value;
 
@@ -222,7 +268,7 @@ function updateTour(){
   }
   else if(selectedTour === "private"){
     drinksSection.classList.remove("hidden");
-    tourTitle.innerText = "Private Charter met drank en extra opties";
+    tourTitle.innerText = "Private Charter All-In";
   }
   else{
     drinksSection.classList.add("hidden");
@@ -235,6 +281,8 @@ function updateTour(){
 function updateCalculation(){
   let p = parseInt(people.value) || 0;
   included.textContent = p * 2;
+
+  calculateTripPrice();
 
   let total = 0;
 
@@ -279,13 +327,14 @@ function createSummary(){
   const peopleValue = parseInt(people.value) || 0;
   const tourText = tourSelect.options[tourSelect.selectedIndex].text;
   const selectedTour = tourSelect.value;
+  const tripPrice = tripTotal.textContent;
   const totalExtra = extraTotal.textContent;
   const message = document.querySelector('textarea[name="message"]').value;
 
   let beer = document.querySelector('input[name="bier_inbegrepen"]').checked ? "Ja" : "Nee";
   let soft = document.querySelector('input[name="frisdrank_inbegrepen"]').checked ? "Ja" : "Nee";
 
-  let drinksInfo = "Niet inbegrepen bij deze tour";
+  let drinksInfo = "<p><strong>Inbegrepen drankjes:</strong> Niet inbegrepen bij deze tour</p>";
 
   if(selectedTour === "spanishwaterwithfood" || selectedTour === "private"){
     drinksInfo = `
@@ -295,8 +344,8 @@ function createSummary(){
     `;
   }
 
-  let sushiInfo = sushiCheck.checked ? `${sushiQty.value || 0} personen x 30 XCG` : "Nee";
-  let cheeseInfo = cheeseCheck.checked ? `${cheeseQty.value || 0} personen x 20 XCG` : "Nee";
+  let sushiInfo = sushiCheck.checked ? `${sushiQty.value || 0} personen x $30` : "Nee";
+  let cheeseInfo = cheeseCheck.checked ? `${cheeseQty.value || 0} personen x $20` : "Nee";
 
   const summaryHtml = `
     <p><strong>Naam:</strong> ${name}</p>
@@ -304,11 +353,13 @@ function createSummary(){
     <p><strong>Tour:</strong> ${tourText}</p>
     <p><strong>Datum:</strong> ${date}</p>
     <p><strong>Aantal personen:</strong> ${peopleValue}</p>
+    <p><strong>Tripprijs:</strong> $${tripPrice}</p>
     ${drinksInfo}
     <p><strong>Sushi platter:</strong> ${sushiInfo}</p>
     <p><strong>Kaasplank:</strong> ${cheeseInfo}</p>
     <p><strong>Extra flessen:</strong><br>${bottleSummary()}</p>
-    <p><strong>Extra kosten:</strong> ${totalExtra} XCG</p>
+    <p><strong>Extra kosten:</strong> $${totalExtra}</p>
+    <p><strong>Totaal exclusief eventuele overige afspraken:</strong> $${parseInt(tripPrice || 0) + parseInt(totalExtra || 0)}</p>
     <p><strong>Extra informatie:</strong> ${message || "Geen"}</p>
   `;
 
