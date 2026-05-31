@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boek uw Tour - VillaVis</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+
+<header class="bg-white shadow p-4 flex justify-between items-center">
+<h1 class="text-xl font-bold">VillaVis - Tour Reserveren</h1>
+<nav>
+<a href="index.html" class="text-blue-600 hover:underline mx-2">Home</a>
+</nav>
+</header>
+
+<main class="max-w-3xl mx-auto py-10 px-4">
+
+<h2 id="tourTitle" class="text-3xl font-semibold mb-6">Reserveer uw tour</h2>
+
+<form action="https://formspree.io/f/mzdjvpej" method="POST" class="bg-white p-6 rounded-lg shadow space-y-5">
+
+<div>
+<label class="block font-medium">Naam</label>
+<input type="text" name="name" required class="mt-1 w-full border rounded px-3 py-2">
+</div>
+
+<div>
+<label class="block font-medium">Email</label>
+<input type="email" name="_replyto" required class="mt-1 w-full border rounded px-3 py-2">
+</div>
+
+<div>
+<label class="block font-medium">Selecteer Tour</label>
+<select id="tour" name="tour" class="mt-1 w-full border rounded px-3 py-2">
+<option value="">-- Kies een optie --</option>
+
+<option value="spanishwater">
+Sightseeing Tour - zonder drank
+</option>
+
+<option value="spanishwaterwithfood">
+Sightseeing Tour - met 2 drankjes p.p. en extra opties
+</option>
+
+<option value="private">
+Private Charter - met 2 drankjes p.p. en extra opties
+</option>
+
+</select>
+</div>
+
+<div>
+<label class="block font-medium">Gewenste datum</label>
+<input type="date" name="date" required class="mt-1 w-full border rounded px-3 py-2">
+</div>
+
+<div>
+<label class="block font-medium">Aantal personen</label>
+<input type="number" id="people" name="people" min="1" required class="mt-1 w-full border rounded px-3 py-2">
+</div>
+
+<div id="drinksSection" class="space-y-4 hidden">
+
+<div class="bg-blue-50 p-4 rounded">
+<p><strong>Inbegrepen drankjes:</strong> <span id="included">0</span></p>
+<p class="text-sm text-gray-600">Iedere persoon krijgt 2 drankjes inbegrepen.</p>
+</div>
+
+<div>
+<label class="block font-medium mb-2">Kies inbegrepen dranksoort</label>
+
+<label class="block">
+<input type="checkbox" name="bier_inbegrepen" value="ja">
+Bier
+</label>
+
+<label class="block">
+<input type="checkbox" name="frisdrank_inbegrepen" value="ja">
+Frisdrank
+</label>
+</div>
+
+<hr>
+
+<h3 class="text-xl font-semibold">Extra bestellingen</h3>
+
+<div class="space-y-3">
+
+<label class="block">
+<input type="checkbox" id="sushiCheck" name="sushi_platter" value="ja">
+Sushi platter bestellen
+</label>
+
+<div id="sushiBox" class="hidden ml-5">
+<label>Voor hoeveel personen?</label>
+<input type="number" id="sushiQty" name="sushi_personen" min="0" value="0" class="w-full border rounded px-3 py-2">
+<p class="text-sm text-gray-500">Prijs per persoon later invullen.</p>
+</div>
+
+<label class="block">
+<input type="checkbox" id="cheeseCheck" name="kaasplank" value="ja">
+Kaasplank bestellen
+</label>
+
+<div id="cheeseBox" class="hidden ml-5">
+<label>Voor hoeveel personen?</label>
+<input type="number" id="cheeseQty" name="kaasplank_personen" min="0" value="0" class="w-full border rounded px-3 py-2">
+<p class="text-sm text-gray-500">Prijs per persoon later invullen.</p>
+</div>
+
+</div>
+
+<hr>
+
+<h3 class="text-xl font-semibold">Extra flessen bestellen</h3>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+<label>Whiskey Old Parr - 100 XCG
+<input type="number" class="extraBottle w-full border rounded px-3 py-2" name="old_parr" min="0" value="0" data-price="100">
+</label>
+
+<label>Bruine Rum Barceló - 100 XCG
+<input type="number" class="extraBottle w-full border rounded px-3 py-2" name="barcelo" min="0" value="0" data-price="100">
+</label>
+
+<label>Witte Rum Bacardi - 100 XCG
+<input type="number" class="extraBottle w-full border rounded px-3 py-2" name="bacardi" min="0" value="0" data-price="100">
+</label>
+
+<label>Wodka Absolut - 100 XCG
+<input type="number" class="extraBottle w-full border rounded px-3 py-2" name="absolut" min="0" value="0" data-price="100">
+</label>
+
+<label>Witte wijn - 80 XCG
+<input type="number" class="extraBottle w-full border rounded px-3 py-2" name="witte_wijn" min="0" value="0" data-price="80">
+</label>
+
+<label>Rode wijn - 80 XCG
+<input type="number" class="extraBottle w-full border rounded px-3 py-2" name="rode_wijn" min="0" value="0" data-price="80">
+</label>
+
+</div>
+
+<div class="bg-gray-50 p-4 rounded">
+<p><strong>Extra kosten:</strong> <span id="extraTotal">0</span> XCG</p>
+<p class="text-sm text-gray-500">
+Sushi platter en kaasplank staan nu op 0 XCG per persoon. Deze prijs kun je later in de code invullen.
+</p>
+</div>
+
+<input type="hidden" id="extraTotalInput" name="extra_total_xcg" value="0">
+
+</div>
+
+<div>
+<label class="block font-medium">Extra informatie</label>
+<textarea name="message" rows="4" class="mt-1 w-full border rounded px-3 py-2"></textarea>
+</div>
+
+<button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+Boekingsaanvraag versturen
+</button>
+
+</form>
+
+</main>
+
+<footer class="text-center text-gray-500 text-sm py-6">
+© 2025 VillaVis Tours Curacao
+</footer>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const tourParam = params.get('tour');
+
+const drinksSection = document.getElementById("drinksSection");
+const tourSelect = document.getElementById("tour");
+const tourTitle = document.getElementById("tourTitle");
+const people = document.getElementById("people");
+const included = document.getElementById("included");
+
+const sushiCheck = document.getElementById("sushiCheck");
+const sushiBox = document.getElementById("sushiBox");
+const sushiQty = document.getElementById("sushiQty");
+
+const cheeseCheck = document.getElementById("cheeseCheck");
+const cheeseBox = document.getElementById("cheeseBox");
+const cheeseQty = document.getElementById("cheeseQty");
+
+const extraBottles = document.querySelectorAll(".extraBottle");
+const extraTotal = document.getElementById("extraTotal");
+const extraTotalInput = document.getElementById("extraTotalInput");
+
+/* Deze prijzen kun je later aanpassen */
+const sushiPricePerPerson = 0;
+const cheesePricePerPerson = 0;
+
+function updateTour(){
+  let selectedTour = tourSelect.value;
+
+  if(selectedTour === "spanishwater"){
+    drinksSection.classList.add("hidden");
+    tourTitle.innerText = "Sightseeing Tour";
+  }
+  else if(selectedTour === "spanishwaterwithfood"){
+    drinksSection.classList.remove("hidden");
+    tourTitle.innerText = "Sightseeing Tour met drank en extra opties";
+  }
+  else if(selectedTour === "private"){
+    drinksSection.classList.remove("hidden");
+    tourTitle.innerText = "Private Charter met drank en extra opties";
+  }
+  else{
+    drinksSection.classList.add("hidden");
+    tourTitle.innerText = "Reserveer uw tour";
+  }
+
+  updateCalculation();
+}
+
+function updateCalculation(){
+  let p = parseInt(people.value) || 0;
+  included.textContent = p * 2;
+
+  let total = 0;
+
+  if(sushiCheck.checked){
+    total += (parseInt(sushiQty.value) || 0) * sushiPricePerPerson;
+  }
+
+  if(cheeseCheck.checked){
+    total += (parseInt(cheeseQty.value) || 0) * cheesePricePerPerson;
+  }
+
+  extraBottles.forEach(item => {
+    let qty = parseInt(item.value) || 0;
+    let price = parseInt(item.dataset.price) || 0;
+    total += qty * price;
+  });
+
+  extraTotal.textContent = total;
+  extraTotalInput.value = total;
+}
+
+sushiCheck.addEventListener("change", function(){
+  sushiBox.classList.toggle("hidden", !sushiCheck.checked);
+  updateCalculation();
+});
+
+cheeseCheck.addEventListener("change", function(){
+  cheeseBox.classList.toggle("hidden", !cheeseCheck.checked);
+  updateCalculation();
+});
+
+people.addEventListener("input", updateCalculation);
+sushiQty.addEventListener("input", updateCalculation);
+cheeseQty.addEventListener("input", updateCalculation);
+
+extraBottles.forEach(item => {
+  item.addEventListener("input", updateCalculation);
+});
+
+tourSelect.addEventListener("change", updateTour);
+
+if(tourParam){
+  tourSelect.value = tourParam;
+}
+
+updateTour();
+</script>
+
+</body>
+</html>
