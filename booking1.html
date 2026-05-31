@@ -36,19 +36,9 @@
 <label class="block font-medium">Selecteer Tour</label>
 <select id="tour" name="tour" class="mt-1 w-full border rounded px-3 py-2">
 <option value="">-- Kies een optie --</option>
-
-<option value="spanishwater">
-Sightseeing Tour - zonder drank
-</option>
-
-<option value="spanishwaterwithfood">
-Sightseeing Tour - met 2 drankjes p.p. en extra opties
-</option>
-
-<option value="private">
-Private Charter - met 2 drankjes p.p. en extra opties
-</option>
-
+<option value="spanishwater">Sightseeing Tour - zonder drank</option>
+<option value="spanishwaterwithfood">Sightseeing Tour - met 2 drankjes p.p. en extra opties</option>
+<option value="private">Private Charter - met 2 drankjes p.p. en extra opties</option>
 </select>
 </div>
 
@@ -97,7 +87,7 @@ Sushi platter bestellen
 <div id="sushiBox" class="hidden ml-5">
 <label>Voor hoeveel personen?</label>
 <input type="number" id="sushiQty" name="sushi_personen" min="0" value="0" class="w-full border rounded px-3 py-2">
-<p class="text-sm text-gray-500">Prijs per persoon later invullen.</p>
+<p class="text-sm text-gray-500">30 XCG per persoon</p>
 </div>
 
 <label class="block">
@@ -108,7 +98,7 @@ Kaasplank bestellen
 <div id="cheeseBox" class="hidden ml-5">
 <label>Voor hoeveel personen?</label>
 <input type="number" id="cheeseQty" name="kaasplank_personen" min="0" value="0" class="w-full border rounded px-3 py-2">
-<p class="text-sm text-gray-500">Prijs per persoon later invullen.</p>
+<p class="text-sm text-gray-500">20 XCG per persoon</p>
 </div>
 
 </div>
@@ -147,9 +137,6 @@ Kaasplank bestellen
 
 <div class="bg-gray-50 p-4 rounded">
 <p><strong>Extra kosten:</strong> <span id="extraTotal">0</span> XCG</p>
-<p class="text-sm text-gray-500">
-Sushi platter en kaasplank staan nu op 0 XCG per persoon. Deze prijs kun je later in de code invullen.
-</p>
 </div>
 
 <input type="hidden" id="extraTotalInput" name="extra_total_xcg" value="0">
@@ -195,9 +182,8 @@ const extraBottles = document.querySelectorAll(".extraBottle");
 const extraTotal = document.getElementById("extraTotal");
 const extraTotalInput = document.getElementById("extraTotalInput");
 
-/* Deze prijzen kun je later aanpassen */
-const sushiPricePerPerson = 0;
-const cheesePricePerPerson = 0;
+const sushiPricePerPerson = 30;
+const cheesePricePerPerson = 20;
 
 function updateTour(){
   let selectedTour = tourSelect.value;
