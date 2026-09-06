@@ -40,12 +40,16 @@ Reserveer uw tour
 <div>
 <label class="block font-medium">Selecteer Tour</label>
 
-<select id="tour" name="tour" class="mt-1 w-full border rounded px-3 py-2">
+<select id="tour" name="tour" required class="mt-1 w-full border rounded px-3 py-2">
 
 <option value="">-- Kies een optie --</option>
 
 <option value="spanishwater">
 Sightseeing Tour (zonder drank)
+</option>
+
+<option value="fuiksunday">
+Fuik Sunday Tour (zonder drank)
 </option>
 
 <option value="spanishwaterwithfood">
@@ -69,8 +73,34 @@ Private Charter (met drank)
 <!-- Personen -->
 <div>
 <label class="block font-medium">Aantal personen</label>
-<input type="number" id="people" name="people" min="1" required class="mt-1 w-full border rounded px-3 py-2">
+
+<input
+type="number"
+id="people"
+name="people"
+min="1"
+required
+class="mt-1 w-full border rounded px-3 py-2"
+>
+
+<p id="peopleInfo" class="text-sm text-gray-600 mt-1"></p>
+
 </div>
+
+<!-- PRIJS SECTIE -->
+<div id="priceSection" class="bg-green-50 p-4 rounded">
+
+<p>
+<strong>Tripprijs:</strong>
+<span id="tripPrice">0</span> XCG
+</p>
+
+<p id="priceInfo" class="text-sm text-gray-600 mt-1"></p>
+
+</div>
+
+<!-- Verborgen prijsvelden voor Formspree -->
+<input type="hidden" id="tripPriceInput" name="trip_price_xcg" value="0">
 
 <!-- DRANK SECTIE -->
 <div id="drinksSection" class="space-y-4">
@@ -169,71 +199,244 @@ const drinksSection = document.getElementById("drinksSection");
 const tourSelect = document.getElementById("tour");
 const tourTitle = document.getElementById("tourTitle");
 
+const people = document.getElementById("people");
+const peopleInfo = document.getElementById("peopleInfo");
+
+const tripPrice = document.getElementById("tripPrice");
+const tripPriceInput = document.getElementById("tripPriceInput");
+const priceInfo = document.getElementById("priceInfo");
+
+
+// ==============================
+// TOUR SELECTIE
+// ==============================
+
 function updateTour(){
 
 let selectedTour = tourSelect.value;
 
+
+// Sightseeing zonder drank
 if(selectedTour === "spanishwater"){
 
 drinksSection.style.display = "none";
+
 tourTitle.innerText = "Sightseeing Tour";
+
+people.removeAttribute("max");
+
+peopleInfo.innerText = "";
+
+priceInfo.innerText = "Prijs wordt op aanvraag bevestigd.";
 
 }
 
+
+// Fuik Sunday
+else if(selectedTour === "fuiksunday"){
+
+drinksSection.style.display = "none";
+
+tourTitle.innerText = "Fuik Sunday Tour";
+
+people.setAttribute("max", "30");
+
+peopleInfo.innerText = "Maximum 30 personen.";
+
+}
+
+
+// Sightseeing All-In
 else if(selectedTour === "spanishwaterwithfood"){
 
 drinksSection.style.display = "block";
+
 tourTitle.innerText = "Sightseeing All-In Tour";
+
+people.removeAttribute("max");
+
+peopleInfo.innerText = "";
 
 }
 
+
+// Private Charter
 else if(selectedTour === "private"){
 
 drinksSection.style.display = "block";
+
 tourTitle.innerText = "Private Charter";
 
-}
+people.removeAttribute("max");
+
+peopleInfo.innerText = "";
 
 }
+
+
+else{
+
+drinksSection.style.display = "none";
+
+tourTitle.innerText = "Reserveer uw tour";
+
+people.removeAttribute("max");
+
+peopleInfo.innerText = "";
+
+}
+
+updatePrice();
+
+}
+
+
+// ==============================
+// PRIJS BEREKENING
+// ==============================
+
+function updatePrice(){
+
+let selectedTour = tourSelect.value;
+
+let p = parseInt(people.value) || 0;
+
+let price = 0;
+
+
+// Fuik Sunday
+if(selectedTour === "fuiksunday"){
+
+// Maximum controleren
+if(p > 30){
+
+people.value = 30;
+
+p = 30;
+
+}
+
+price = p * 100;
+
+priceInfo.innerText = "Fuik Sunday Tour: 100 XCG per persoon. Maximum 30 personen.";
+
+}
+
+
+// Sightseeing All-In
+else if(selectedTour === "spanishwaterwithfood"){
+
+// Bestaande prijslogica
+price = 600;
+
+if(p > 6){
+
+price += (p - 6) * 50;
+
+}
+
+priceInfo.innerText =
+"Sightseeing All-In: 600 XCG inclusief 6 personen. Vanaf meer dan 6 personen: 50 XCG per extra persoon.";
+
+}
+
+
+// Private Charter
+else if(selectedTour === "private"){
+
+price = 1000;
+
+priceInfo.innerText =
+"Private Charter: vaste prijs van 1000 XCG.";
+
+}
+
+
+// Sightseeing zonder drank
+else if(selectedTour === "spanishwater"){
+
+price = 0;
+
+priceInfo.innerText =
+"Sightseeing Tour zonder drank: prijs wordt op aanvraag bevestigd.";
+
+}
+
+
+else{
+
+price = 0;
+
+priceInfo.innerText = "";
+
+}
+
+
+tripPrice.innerText = price;
+tripPriceInput.value = price;
+
+}
+
+
+// ==============================
+// URL TOUR
+// ==============================
 
 if(tourParam){
 
 tourSelect.value = tourParam;
+
+updateTour();
+
+}
+else{
+
 updateTour();
 
 }
 
+
 tourSelect.addEventListener("change", updateTour);
 
+people.addEventListener("input", updatePrice);
 
-// drank berekening
 
-const people = document.getElementById("people");
+// ==============================
+// DRANK BEREKENING
+// ==============================
+
 const drinks = document.querySelectorAll(".drink");
+
 const included = document.getElementById("included");
 const selected = document.getElementById("selected");
 const warning = document.getElementById("warning");
 
+
 function updateDrinks(){
 
 let p = parseInt(people.value) || 0;
+
 let inc = p * 2;
 
 included.textContent = inc;
 
 let total = 0;
 
-drinks.forEach(d=>{
+drinks.forEach(d => {
+
 total += parseInt(d.value) || 0;
+
 });
 
 selected.textContent = total;
+
 
 if(total > inc){
 
 warning.classList.remove("hidden");
 
-}else{
+}
+else{
 
 warning.classList.add("hidden");
 
@@ -241,10 +444,14 @@ warning.classList.add("hidden");
 
 }
 
+
 people.addEventListener("input", updateDrinks);
 
-drinks.forEach(d=>{
+
+drinks.forEach(d => {
+
 d.addEventListener("input", updateDrinks);
+
 });
 
 </script>
