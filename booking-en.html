@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +20,7 @@
 <main class="max-w-3xl mx-auto py-10 px-4">
 
 <h2 id="tourTitle" class="text-3xl font-semibold mb-6">
-Reserve Your Tour
+Book Your Tour
 </h2>
 
 <form action="https://formspree.io/f/mzdjvpej" method="POST" class="bg-white p-6 rounded-lg shadow space-y-4">
@@ -36,16 +37,20 @@ Reserve Your Tour
 <input type="email" name="_replyto" required class="mt-1 w-full border rounded px-3 py-2">
 </div>
 
-<!-- Tour selection -->
+<!-- Tour Selection -->
 <div>
 <label class="block font-medium">Select Tour</label>
 
-<select id="tour" name="tour" class="mt-1 w-full border rounded px-3 py-2">
+<select id="tour" name="tour" required class="mt-1 w-full border rounded px-3 py-2">
 
-<option value="">-- Please choose an option --</option>
+<option value="">-- Choose an option --</option>
 
 <option value="spanishwater">
-Sightseeing Tour (no drinks included)
+Sightseeing Tour (drinks not included)
+</option>
+
+<option value="fuiksunday">
+Fuik Sunday Tour (drinks not included)
 </option>
 
 <option value="spanishwaterwithfood">
@@ -66,31 +71,57 @@ Private Charter (drinks included)
 <input type="date" name="date" required class="mt-1 w-full border rounded px-3 py-2">
 </div>
 
-<!-- Number of people -->
+<!-- People -->
 <div>
-<label class="block font-medium">Number of Guests</label>
-<input type="number" id="people" name="people" min="1" required class="mt-1 w-full border rounded px-3 py-2">
+<label class="block font-medium">Number of People</label>
+
+<input
+type="number"
+id="people"
+name="people"
+min="1"
+required
+class="mt-1 w-full border rounded px-3 py-2"
+>
+
+<p id="peopleInfo" class="text-sm text-gray-600 mt-1"></p>
+
 </div>
 
-<!-- DRINK SECTION -->
+<!-- PRICE SECTION -->
+<div id="priceSection" class="bg-green-50 p-4 rounded">
+
+<p>
+<strong>Trip Price:</strong>
+<span id="tripPrice">0</span> XCG
+</p>
+
+<p id="priceInfo" class="text-sm text-gray-600 mt-1"></p>
+
+</div>
+
+<!-- Hidden price field for Formspree -->
+<input type="hidden" id="tripPriceInput" name="trip_price_xcg" value="0">
+
+<!-- DRINKS SECTION -->
 <div id="drinksSection" class="space-y-4">
 
 <div class="bg-blue-50 p-4 rounded">
 
 <p>
-<strong>Included drinks:</strong>
+<strong>Included Drinks:</strong>
 <span id="included">0</span>
 </p>
 
 <p class="text-sm text-gray-600">
-Each guest receives 2 drinks included.
+Each person receives 2 drinks included.
 </p>
 
 </div>
 
 <div>
 
-<label class="block font-medium mb-2">Select Drinks</label>
+<label class="block font-medium mb-2">Choose Your Drinks</label>
 
 <div class="grid grid-cols-2 gap-3">
 
@@ -118,7 +149,7 @@ Each guest receives 2 drinks included.
 <input type="number" class="drink w-full border rounded px-2 py-1" name="ginger_ale" value="0" min="0">
 </label>
 
-<label>Sinas
+<label>Orange Soda
 <input type="number" class="drink w-full border rounded px-2 py-1" name="sinas" value="0" min="0">
 </label>
 
@@ -129,19 +160,20 @@ Each guest receives 2 drinks included.
 </div>
 
 <p class="mt-3">
-Selected drinks:
+Selected Drinks:
 <strong id="selected">0</strong>
 </p>
 
 <p id="warning" class="text-red-600 hidden">
-You selected more drinks than included. Extra drinks will be charged afterwards.
+You have selected more drinks than are included.
+Additional drinks will be charged afterwards.
 </p>
 
 </div>
 
 </div>
 
-<!-- Extra info -->
+<!-- Additional Information -->
 <div>
 <label class="block font-medium">Additional Information</label>
 <textarea name="message" rows="4" class="mt-1 w-full border rounded px-3 py-2"></textarea>
@@ -168,79 +200,263 @@ const drinksSection = document.getElementById("drinksSection");
 const tourSelect = document.getElementById("tour");
 const tourTitle = document.getElementById("tourTitle");
 
+const people = document.getElementById("people");
+const peopleInfo = document.getElementById("peopleInfo");
+
+const tripPrice = document.getElementById("tripPrice");
+const tripPriceInput = document.getElementById("tripPriceInput");
+const priceInfo = document.getElementById("priceInfo");
+
+
+// ==============================
+// TOUR SELECTION
+// ==============================
+
 function updateTour(){
 
 let selectedTour = tourSelect.value;
 
+
+// Sightseeing without drinks
 if(selectedTour === "spanishwater"){
 
 drinksSection.style.display = "none";
+
 tourTitle.innerText = "Sightseeing Tour";
+
+people.removeAttribute("max");
+
+peopleInfo.innerText = "";
+
+priceInfo.innerText = "Price will be confirmed upon request.";
 
 }
 
+
+// Fuik Sunday
+else if(selectedTour === "fuiksunday"){
+
+drinksSection.style.display = "none";
+
+tourTitle.innerText = "Fuik Sunday Tour";
+
+people.setAttribute("max", "30");
+
+peopleInfo.innerText = "Maximum 30 people.";
+
+}
+
+
+// Sightseeing All-In
 else if(selectedTour === "spanishwaterwithfood"){
 
 drinksSection.style.display = "block";
+
 tourTitle.innerText = "Sightseeing All-In Tour";
+
+people.removeAttribute("max");
+
+peopleInfo.innerText = "";
 
 }
 
+
+// Private Charter
 else if(selectedTour === "private"){
 
 drinksSection.style.display = "block";
+
 tourTitle.innerText = "Private Charter";
 
-}
+people.removeAttribute("max");
+
+peopleInfo.innerText = "";
 
 }
+
+
+else{
+
+drinksSection.style.display = "none";
+
+tourTitle.innerText = "Book Your Tour";
+
+people.removeAttribute("max");
+
+peopleInfo.innerText = "";
+
+}
+
+updatePrice();
+
+}
+
+
+// ==============================
+// PRICE CALCULATION
+// ==============================
+
+function updatePrice(){
+
+let selectedTour = tourSelect.value;
+
+let p = parseInt(people.value) || 0;
+
+let price = 0;
+
+
+// Fuik Sunday
+if(selectedTour === "fuiksunday"){
+
+// Check maximum
+if(p > 30){
+
+people.value = 30;
+
+p = 30;
+
+}
+
+price = p * 100;
+
+priceInfo.innerText = "Fuik Sunday Tour: 100 XCG per person. Maximum 30 people.";
+
+}
+
+
+// Sightseeing All-In
+else if(selectedTour === "spanishwaterwithfood"){
+
+// Existing price logic
+price = 600;
+
+if(p > 6){
+
+price += (p - 6) * 50;
+
+}
+
+priceInfo.innerText =
+"Sightseeing All-In: 600 XCG including 6 people. For more than 6 people: 50 XCG per additional person.";
+
+}
+
+
+// Private Charter
+else if(selectedTour === "private"){
+
+price = 1000;
+
+priceInfo.innerText =
+"Private Charter: fixed price of 1000 XCG.";
+
+}
+
+
+// Sightseeing without drinks
+else if(selectedTour === "spanishwater"){
+
+price = 0;
+
+priceInfo.innerText =
+"Sightseeing Tour without drinks: price will be confirmed upon request.";
+
+}
+
+
+else{
+
+price = 0;
+
+priceInfo.innerText = "";
+
+}
+
+
+tripPrice.innerText = price;
+tripPriceInput.value = price;
+
+}
+
+
+// ==============================
+// URL TOUR
+// ==============================
 
 if(tourParam){
 
 tourSelect.value = tourParam;
+
+updateTour();
+
+}
+else{
+
 updateTour();
 
 }
 
+
 tourSelect.addEventListener("change", updateTour);
 
+people.addEventListener("input", updatePrice);
 
-const people = document.getElementById("people");
+
+// ==============================
+// DRINK CALCULATION
+// ==============================
+
 const drinks = document.querySelectorAll(".drink");
+
 const included = document.getElementById("included");
 const selected = document.getElementById("selected");
 const warning = document.getElementById("warning");
 
+
 function updateDrinks(){
 
 let p = parseInt(people.value) || 0;
+
 let inc = p * 2;
 
 included.textContent = inc;
 
 let total = 0;
 
-drinks.forEach(d=>{
+drinks.forEach(d => {
+
 total += parseInt(d.value) || 0;
+
 });
 
 selected.textContent = total;
 
+
 if(total > inc){
+
 warning.classList.remove("hidden");
-}else{
+
+}
+else{
+
 warning.classList.add("hidden");
+
 }
 
 }
+
 
 people.addEventListener("input", updateDrinks);
 
-drinks.forEach(d=>{
+
+drinks.forEach(d => {
+
 d.addEventListener("input", updateDrinks);
+
 });
 
 </script>
 
 </body>
 </html>
+```
