@@ -328,7 +328,7 @@ priceInfo.innerText = "Fuik Sunday Tour: 100 XCG per person. Maximum 30 people."
 else if(selectedTour === "spanishwaterwithfood"){
 
 // Existing price logic
-price = 600;
+price = 300;
 
 if(p > 6){
 
@@ -337,7 +337,7 @@ price += (p - 6) * 50;
 }
 
 priceInfo.innerText =
-"Sightseeing All-In: 600 XCG including 6 people. For more than 6 people: 50 XCG per additional person.";
+"Sightseeing All-In: 300 XCG including 6 people. For more than 6 people: 50 XCG per additional person.";
 
 }
 
@@ -345,10 +345,10 @@ priceInfo.innerText =
 // Private Charter
 else if(selectedTour === "private"){
 
-price = 1000;
+price = 0;
 
 priceInfo.innerText =
-"Private Charter: fixed price of 1000 XCG.";
+"Private Charter: Price on demand.";
 
 }
 
