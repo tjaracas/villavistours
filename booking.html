@@ -327,7 +327,7 @@ priceInfo.innerText = "Fuik Sunday Tour: 100 XCG per persoon. Maximum 30 persone
 else if(selectedTour === "spanishwaterwithfood"){
 
 // Bestaande prijslogica
-price = 600;
+price = 300;
 
 if(p > 6){
 
@@ -336,7 +336,7 @@ price += (p - 6) * 50;
 }
 
 priceInfo.innerText =
-"Sightseeing All-In: 600 XCG inclusief 6 personen. Vanaf meer dan 6 personen: 50 XCG per extra persoon.";
+"Sightseeing All-In: 300 XCG inclusief 6 personen. Vanaf meer dan 6 personen: 50 XCG per extra persoon.";
 
 }
 
@@ -344,10 +344,10 @@ priceInfo.innerText =
 // Private Charter
 else if(selectedTour === "private"){
 
-price = 1000;
+price = 0;
 
 priceInfo.innerText =
-"Private Charter: vaste prijs van 1000 XCG.";
+"Private Charter: Prijs op aanvraag.";
 
 }
 
