@@ -355,10 +355,16 @@ priceInfo.innerText =
 // Sightseeing zonder drank
 else if(selectedTour === "spanishwater"){
 
-price = 0;
+price = 200;
+
+if(p > 6){
+
+price += (p - 6) * 30;
+
+}
 
 priceInfo.innerText =
-"Sightseeing Tour zonder drank: prijs wordt op aanvraag bevestigd.";
+"Sightseeing All-In: 200 XCG inclusief 6 personen. Vanaf meer dan 6 personen: 30 XCG per extra persoon.";
 
 }
 
