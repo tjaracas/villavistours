@@ -227,21 +227,26 @@ function calculateTripPrice(){
   let info = "";
 
   if(selectedTour === "private"){
-    price = 1000;
-    info = "Private Charter All-In: vaste prijs van $1000.";
+    price = 0;
+    info = "Private Charter All-In: Prijs in overleg.";
   }
   else if(selectedTour === "spanishwaterwithfood"){
-    price = 600;
+    price = 300;
 
     if(p > 6){
       price += (p - 6) * 50;
     }
 
-    info = "Sightseeing All-In: $600 inclusief 6 personen. Vanaf meer dan 6 personen: $50 per extra persoon.";
+    info = "Sightseeing All-In: XCG 300 inclusief 6 personen. Vanaf meer dan 6 personen: XCG 50 per extra persoon.";
   }
   else if(selectedTour === "spanishwater"){
-    price = 0;
-    info = "Sightseeing Tour zonder drank: prijs nog niet ingesteld.";
+  price = 200;
+
+    if(p > 6){
+      price += (p - 6) * 30;
+    }
+
+    info = "Sightseeing All-In: XCG 200 inclusief 6 personen. Vanaf meer dan 6 personen: XCG 30 per extra persoon.";
   }
   else{
     price = 0;
