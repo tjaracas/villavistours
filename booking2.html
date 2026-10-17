@@ -231,22 +231,22 @@ function calculateTripPrice() {
     info = "Private Charter All-In: Prijs in overleg.";
   }
   else if (selectedTour === "spanishwaterwithfood") {
-    price = 300;
+    price = 525;
 
     if (p > 6) {
-      price += (p - 6) * 50;
+      price += (p - 6) * 87,50;
     }
 
-    info = "Sightseeing All-In: XCG 300 inclusief 6 personen. Vanaf meer dan 6 personen: XCG 50 per extra persoon.";
+    info = "Sightseeing All-In: XCG 525 inclusief 6 personen. Vanaf meer dan 6 personen: XCG 82,50 per extra persoon.";
   }
   else if (selectedTour === "spanishwater") {
-    price = 200;
+    price = 350;
 
     if (p > 6) {
-      price += (p - 6) * 30;
+      price += (p - 6) * 52,50;
     }
 
-    info = "Sightseeing All-In: XCG 200 inclusief 6 personen. Vanaf meer dan 6 personen: XCG 30 per extra persoon.";
+    info = "Sightseeing All-In: XCG 350 inclusief 6 personen. Vanaf meer dan 6 personen: XCG 52,50 per extra persoon.";
   }
   else {
     price = 0;
